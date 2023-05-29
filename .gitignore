@@ -9,8 +9,6 @@ dist_electron
 .env.local
 .env.*.local
 .env.production
-.env.development
-.env
 
 # Log files
 npm-debug.log*
