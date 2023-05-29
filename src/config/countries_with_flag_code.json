@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Pakistan",
+    "dial_code": "+92",
+    "code": "PK",
+    "flag": "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/PK.svg",
+    "unicode": "U+1F1F5 U+1F1F0"
+  },
+  {
+    "name": "India",
+    "dial_code": "+91",
+    "code": "IN",
+    "flag": "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/IN.svg",
+    "unicode": "U+1F1EE U+1F1F3"
+  },
+  {
+    "name": "Afghanistan",
+    "dial_code": "+93",
+    "code": "AF",
+    "flag": "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AF.svg",
+    "unicode": "U+1F1E6 U+1F1EB"
+  },
+  {
+    "name": "Australia",
+    "dial_code": "+61",
+    "code": "AU",
+    "flag": "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/AU.svg",
+    "unicode": "U+1F1E6 U+1F1FA"
+  }
+]

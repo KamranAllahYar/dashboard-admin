@@ -1,0 +1,175 @@
+<template>
+  <n-form ref="formRef" :label-width="80" :model="formValue" :rules="rules" size="small">
+    <n-grid cols="2 s:1 m:2 l:3 xl:3" responsive="screen">
+      <n-grid-item>
+        <n-form-item
+          style="margin-left: 5px; margin-right: 5px; padding-top: 24px"
+          label="Title"
+          path="meta.title"
+        >
+          <n-input v-model:value="formValue.meta.title" placeholder="Title" />
+        </n-form-item>
+      </n-grid-item>
+      <n-grid-item>
+        <n-form-item
+          style="margin-left: 5px; margin-right: 5px; padding-top: 24px"
+          label="Name"
+          path="name"
+        >
+          <n-input v-model:value="formValue.name" placeholder="Name" />
+        </n-form-item>
+      </n-grid-item>
+      <n-grid-item>
+        <n-form-item
+          style="margin-left: 5px; margin-right: 5px; padding-top: 24px"
+          label="Path"
+          path="path"
+        >
+          <n-input v-model:value="formValue.path" placeholder="Path" />
+        </n-form-item>
+      </n-grid-item>
+      <n-grid-item>
+        <n-form-item
+          style="margin-left: 5px; margin-right: 5px; padding-top: 24px"
+          label="Parent Menu"
+        >
+          <menu-selector v-model:value="formValue.parent_id" label-field="title" value-field="id" />
+        </n-form-item>
+      </n-grid-item>
+      <n-grid-item>
+        <n-form-item
+          style="margin-left: 5px; margin-right: 5px; padding-top: 24px"
+          label="Description"
+        >
+          <n-input v-model:value="formValue.description" placeholder="Description" />
+        </n-form-item>
+      </n-grid-item>
+      <n-grid-item>
+        <n-form-item
+          style="margin-left: 5px; margin-right: 5px; padding-top: 24px"
+          label="Redirect"
+        >
+          <n-input v-model:value="formValue.redirect" placeholder="Redirect" />
+        </n-form-item>
+      </n-grid-item>
+      <n-grid-item>
+        <n-form-item
+          style="margin-left: 5px; margin-right: 5px; padding-top: 24px"
+          label="Component"
+          path="component"
+        >
+          <n-input v-model:value="formValue.component" placeholder="Component" />
+        </n-form-item>
+      </n-grid-item>
+      <n-grid-item>
+        <n-form-item
+          style="margin-left: 5px; margin-right: 5px; padding-top: 24px"
+          label="Roles"
+          path="roles"
+        >
+          <role-selector
+            v-model:value="formValue.roles"
+            label-field="name"
+            value-field="name"
+            :tag="true"
+          />
+        </n-form-item>
+      </n-grid-item>
+      <n-grid-item>
+        <n-form-item
+          style="margin-left: 5px; margin-right: 5px; padding-top: 24px"
+          label="Permissions"
+        >
+          <permission-selector
+            v-model:value="formValue.permissions"
+            label-field="name"
+            value-field="name"
+            :tag="true"
+          />
+        </n-form-item>
+      </n-grid-item>
+      <n-grid-item>
+        <n-form-item style="margin-left: 5px; margin-right: 5px; padding-top: 24px" label="Icon">
+          <n-input v-model:value="formValue.meta.icon" placeholder="Icon" />
+        </n-form-item>
+      </n-grid-item>
+      <n-grid-item>
+        <n-form-item
+          style="margin-left: 5px; margin-right: 5px; padding-top: 24px"
+          label="Sort"
+          path="sort"
+        >
+          <n-input-number type="number" v-model:value="formValue.meta.sort" placeholder="Sort" />
+        </n-form-item>
+      </n-grid-item>
+      <n-grid-item>
+        <n-space justify="space-evenly">
+
+          <n-form-item style="margin-left: 5px; margin-right: 5px; padding-top: 24px" label="Status">
+            <n-switch v-model:value="formValue.status" />
+          </n-form-item>
+          <n-form-item style="margin-left: 5px; margin-right: 5px; padding-top: 24px" label="Hidden">
+            <n-switch v-model:value="formValue.meta.hidden" />
+          </n-form-item>
+        </n-space>
+      </n-grid-item>
+    </n-grid>
+    <n-space style="display: flex; justify-self: center" :vertical="true">
+      <n-form-item style="display: flex; justify-content: center">
+        <n-button :round="true" type="info" style="alignment: center" @click="handleValidateClick">
+          Create</n-button
+        >
+      </n-form-item>
+    </n-space>
+  </n-form>
+</template>
+
+<script lang="ts" setup>
+  import { ref } from 'vue';
+  import { FormInst } from 'naive-ui';
+  import { createMenu } from '@/api/system/menu';
+  import RoleSelector from '@/components/Role/RoleSelector.vue';
+  import PermissionSelector from '@/components/Permission/PermissionSelector.vue';
+  import MenuSelector from '@/components/Menu/MenuSelector.vue';
+
+  const formValue: any = ref({ meta: {} });
+  const formRef = ref<FormInst | null>(null);
+  const emits = defineEmits(['created']);
+  const rules = ref({
+    name: {
+      required: true,
+      message: 'Please enter name',
+      trigger: 'blur',
+    },
+    path: {
+      required: true,
+      message: 'Please enter path',
+      trigger: 'blur',
+    },
+    meta: {
+      title: {
+        required: true,
+        message: 'Please enter title',
+        trigger: 'blur',
+      },
+
+    },
+  });
+
+  const handleValidateClick = (e: MouseEvent) => {
+    e.preventDefault();
+    formRef.value?.validate((errors) => {
+      if (!errors) {
+        const data = formValue.value;
+        // console.log(data);
+        createMenu(data).then(({ result }) => {
+          window['$message'].success(result.message);
+          emits('created', result.data);
+        });
+      } else {
+        console.log(errors);
+        window['$message'].error('Please fill out required fields');
+      }
+    });
+  };
+</script>
